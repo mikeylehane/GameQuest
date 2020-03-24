@@ -1,2 +1,2 @@
 # GameQuest
-Future Assignments + Homework
+ games + quests
