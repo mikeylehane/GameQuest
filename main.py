@@ -1,9 +1,17 @@
 # KidsCanCode - Game Development with Pygame video series
 # Jumpy! (a platform game) - Part 2
 # Video link: https://www.youtube.com/watch?v=8LRI0RLKyt0
+# © 2019 KidsCanCode LLC / All rights reserved.
 # Player movement
 
 import pygame as pg
+import random
+from settings import *
+from sprites import *
+
+import pygame as pg
+from pygame.sprite import Group
+# from pg.sprite import Group
 import random
 from settings import *
 from sprites import *
@@ -20,9 +28,13 @@ class Game:
 
     def new(self):
         # start a new game
-        self.all_sprites = pg.sprite.Group()
-        self.player = Player()
+        self.all_sprites = Group()
+        self.platforms = pg.sprite.Group()
+        self.player = Player(self)
         self.all_sprites.add(self.player)
+        ground = Platform(0, HEIGHT-40, WIDTH, 40)
+        self.all_sprites.add(ground)
+        self.platforms.add(ground)
         self.run()
 
     def run(self):
@@ -37,6 +49,11 @@ class Game:
     def update(self):
         # Game Loop - Update
         self.all_sprites.update()
+        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+        if hits:
+            # print("it collided")
+            self.player.pos.y = hits[0].rect.top+1
+            self.player.vel.y = 0
 
     def events(self):
         # Game Loop - events
@@ -64,8 +81,11 @@ class Game:
 
 g = Game()
 g.show_start_screen()
+#Game class has running attribute of true
 while g.running:
+    #SETS UP GROUP, PLAYER inside the game, adds the player to sprites and runs the game
     g.new()
+    #displays screen once ready
     g.show_go_screen()
 
 pg.quit()
