@@ -69,47 +69,6 @@ class Platform(Sprite):
         self.rect.x = x
         self.rect.y = y
 
-class Drone(Sprite):
-    def __init__(self, game, x, y, w, h):
-        Sprite.__init__(self)
-        self.image = pg.Surface((w, h))
-        self.image.fill(TEAL)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-    def hack(self):
-        self.kill()
-    def update(self):
-        self.rect.x += 1
-   
-    
-
-class Dragon(Sprite):
-    def __init__(self, x, y, w, h):
-        Sprite.__init__(self)
-        self.image = pg.Surface((w, h))
-        self.image.fill(LIGHTRED)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-    def DragonSlayer(self):
-        self.kill()
-    def update(self):
-        self.rect.x += 1
-
-class PurpleHero(Sprite):
-     def __init__(self, x, y, w, h):
-        Sprite.__init__(self)
-        self.image = pg.Surface((w, h))
-        self.image.fill(PURPLE)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-    def BeatenUp(self):
-        self.kill()
-    def update(self):
-        self.rect.x += 1
-
 class Pikachu(Sprite):
      def __init__(self, x, y, w, h):
         Sprite.__init__(self)
@@ -118,9 +77,61 @@ class Pikachu(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-    def Fall(self):
-        self.kill()
-    def update(self):
-        self.rect.x += 1
+        self.birth = time.perf_counter_ns()
+        self.lifespan = 2000000000
+
+# class Drone(Sprite):
+#     def __init__(self, game, x, y, w, h):
+#         Sprite.__init__(self)
+#         self.image = pg.Surface((w, h))
+#         self.image.fill(TEAL)
+#         self.rect = self.image.get_rect()
+#         self.rect.x = x
+#         self.rect.y = y
+#     def hack(self):
+#         self.kill()
+#     def update(self):
+#         self.rect.x += 1
+   
+    
+
+# class Dragon(Sprite):
+#     def __init__(self, x, y, w, h):
+#         Sprite.__init__(self)
+#         self.image = pg.Surface((w, h))
+#         self.image.fill(LIGHTRED)
+#         self.rect = self.image.get_rect()
+#         self.rect.x = x
+#         self.rect.y = y
+#     def DragonSlayer(self):
+#         self.kill()
+#     def update(self):
+#         self.rect.x += 1
+
+# class PurpleHero(Sprite):
+#      def __init__(self, x, y, w, h):
+#         Sprite.__init__(self)
+#         self.image = pg.Surface((w, h))
+#         self.image.fill(PURPLE)
+#         self.rect = self.image.get_rect()
+#         self.rect.x = x
+#         self.rect.y = y
+#     def BeatenUp(self):
+#         self.kill()
+#     def update(self):
+#         self.rect.x += 1
+
+# class Pikachu(Sprite):
+#      def __init__(self, x, y, w, h):
+#         Sprite.__init__(self)
+#         self.image = pg.Surface((w, h))
+#         self.image.fill(YELLOW)
+#         self.rect = self.image.get_rect()
+#         self.rect.x = x
+#         self.rect.y = y
+#     def Fall(self):
+#         self.kill()
+#     def update(self):
+#         self.rect.x += 1
 
 
