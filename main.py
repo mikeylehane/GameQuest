@@ -1,13 +1,11 @@
 # KidsCanCode - Game Development with Pygame video series
 # Jumpy! (a platform game) - Part 2
 # Video link: https://www.youtube.com/watch?v=8LRI0RLKyt0
-# © 2019 KidsCanCode LLC / All rights reserved.
 # Player movement
+# © 2019 KidsCanCode LLC / All rights reserved.
 
-import pygame as pg
-import random
-from settings import *
-from sprites import *
+# Week of march 23 - Lore
+# Modularity, Github, import as, 
 
 import pygame as pg
 from pygame.sprite import Group
@@ -33,9 +31,20 @@ class Game:
         self.player = Player(self)
         self.all_sprites.add(self.player)
         ground = Platform(0, HEIGHT-40, WIDTH, 40)
+        plat1 = Platform(200, 400, 150, 20)
+        plat2 = Platform(150, 300, 150, 20)
         self.all_sprites.add(ground)
         self.platforms.add(ground)
+        self.all_sprites.add(plat1)
+        self.platforms.add(plat1)
+        self.all_sprites.add(plat2)
+        self.platforms.add(plat2)
+        # for plat in range(1,10):
+        #     plat = Platform(random.randint(0, WIDTH), random.randint(0, HEIGHT), 200, 20)
+        #     self.all_sprites.add(plat)
+        #     self.platforms.add(plat)
         self.run()
+
 
     def run(self):
         # Game Loop
@@ -51,9 +60,17 @@ class Game:
         self.all_sprites.update()
         hits = pg.sprite.spritecollide(self.player, self.platforms, False)
         if hits:
+            if self.player.rect.top > hits[0].rect.top:
+                print("i hit my head")
+                self.player.vel.y = 15
+                self.player.rect.top = hits[0].rect.bottom + 5
+                self.player.hitpoints -= 10
+                print(self.player.hitpoints)
             # print("it collided")
-            self.player.pos.y = hits[0].rect.top+1
-            self.player.vel.y = 0
+            else:
+                self.player.vel.y = 0
+                self.player.pos.y = hits[0].rect.top+1
+            
 
     def events(self):
         # Game Loop - events
@@ -81,11 +98,8 @@ class Game:
 
 g = Game()
 g.show_start_screen()
-#Game class has running attribute of true
 while g.running:
-    #SETS UP GROUP, PLAYER inside the game, adds the player to sprites and runs the game
     g.new()
-    #displays screen once ready
     g.show_go_screen()
 
 pg.quit()
