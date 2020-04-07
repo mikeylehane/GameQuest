@@ -68,17 +68,36 @@ class Platform(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-
-class Pikachu(Sprite):
-     def __init__(self, x, y, w, h):
+        self.vx = 5 
+    def update(self):
+        self.rect.x += self.vx
+    #GO this way multiply your negative velocity by 1
+        if self.rect.x + self.rect.width > WIDTH or self.rect.x < 0:
+            self.vx*=-1
+#attempted healthbar
+class Healthbar(Sprite):
+    def __init__(self, x, y, w, h):
         Sprite.__init__(self)
         self.image = pg.Surface((w, h))
-        self.image.fill(YELLOW)
+        self.image.fill(LIGHTRED)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.birth = time.perf_counter_ns()
-        self.lifespan = 2000000000
+def update(self):
+    self.rect.width = self.game.player.hitpoints
+    self.blit(self.image, (self.game.player.hitpoints, 0))
+    print(self.rect.width)
+        
+# class Pikachu(Sprite):
+#      def __init__(self, x, y, w, h):
+#         Sprite.__init__(self)
+#         self.image = pg.Surface((w, h))
+#         self.image.fill(YELLOW)
+#         self.rect = self.image.get_rect()
+#         self.rect.x = x
+#         self.rect.y = y
+#         self.birth = time.perf_counter_ns()
+#         self.lifespan = 2000000000
 
 # class Drone(Sprite):
 #     def __init__(self, game, x, y, w, h):

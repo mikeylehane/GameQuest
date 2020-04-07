@@ -23,13 +23,16 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
-
+    #New additions to code including classes  and sprites
     def new(self):
         # start a new game
         self.all_sprites = Group()
         self.platforms = pg.sprite.Group()
         self.player = Player(self)
-        self.all_sprites.add(self.player)
+        #Attempted to add new created class but  confused on how
+        self.Pikachu = pg.sprite.Group()
+        #Added healthbar need to add other class
+        self.healthbar = Healthbar(self, 0, 0, self.player.hitpoints, 25)
         ground = Platform(0, HEIGHT-40, WIDTH, 40)
         plat1 = Platform(200, 400, 150, 20)
         plat2 = Platform(150, 300, 150, 20)
@@ -64,7 +67,7 @@ class Game:
                 print("i hit my head")
                 self.player.vel.y = 15
                 self.player.rect.top = hits[0].rect.bottom + 5
-                self.player.hitpoints -= 10
+                # self.player.hitpoints -= 10
                 print(self.player.hitpoints)
             # print("it collided")
             else:
