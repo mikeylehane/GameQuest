@@ -14,7 +14,10 @@ import random
 from settings import *
 from sprites import *
 
+#Entire game wrapped up in this class
+#all games work in a loop
 class Game:
+    #Intializes
     def __init__(self):
         # initialize game window, etc
         pg.init()
@@ -22,6 +25,7 @@ class Game:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
+        #game.Running
         self.running = True
     #New additions to code including classes  and sprites
     def new(self):
@@ -48,7 +52,7 @@ class Game:
         #     self.platforms.add(plat)
         self.run()
 
-
+    #events happen
     def run(self):
         # Game Loop
         self.playing = True
@@ -57,7 +61,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
-
+    #game updates
     def update(self):
         # Game Loop - Update
         self.all_sprites.update()
@@ -74,7 +78,7 @@ class Game:
                 self.player.vel.y = 0
                 self.player.pos.y = hits[0].rect.top+1
             
-
+    #events happen
     def events(self):
         # Game Loop - events
         for event in pg.event.get():
@@ -83,7 +87,7 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
-
+    #Gam illustrated
     def draw(self):
         # Game Loop - draw
         self.screen.fill(BLACK)
