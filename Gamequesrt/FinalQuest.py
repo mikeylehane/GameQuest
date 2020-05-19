@@ -7,6 +7,9 @@ import pygame as pg
 from pygame.sprite import Sprite
 import random
 from os import path
+#Scoreboard Font
+import pygame.font
+
 #Game Dimensions
 #Width of screen
 WIDTH = 480
@@ -24,6 +27,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
+
 font_name = pg.font.match_font('arial')
 game_dir = path.join(path.dirname(__file__))
 #Load images onto game
@@ -41,6 +45,20 @@ screen = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption("Space Crusaders")
 clock = pg.time.Clock()
 
+# utils
+
+# Prepares font "Arial" for use
+font_name = pg.font.match_font('arial')
+
+# the following function allows us to draw text on the screen
+def draw_text(surf, text, size, x, y):
+    font = pg.font.Font(font_name, size)
+    text_surface = font.render(text, True, WHITE)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x, y)
+    surf.blit(text_surface, text_rect)
+
+#All classes are below
 class Player(Sprite):
     def __init__(self):
         Sprite.__init__(self)
@@ -94,6 +112,7 @@ class Mob(Sprite):
         self.rect.y = random.randrange(0, 240)
         self.speedx = random.randrange(1,10)
         self.speedy = random.randrange(1,10)
+    #Update mob and Mob Boundaries
     def update(self):
         self.rect.x += self.speedx
         if self.rect.x > WIDTH or self.rect.x < 0:
@@ -105,20 +124,82 @@ class Mob(Sprite):
 class Lazer(Sprite):
     def __init__(self, x, y):
         Sprite.__init__(self)
+        #Image size
         self.image = pg.Surface((5,25))
+        #Color associated with class
         self.image.fill(BLUE)
+        #Image Placement
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
         self.speedy = -10
     def update(self):
         self.rect.y += self.speedy
-        #When Player health
+        #When Player health reaches 0 they are killed
         if self.rect.bottom < 0:
             self.kill()
+#Class to report scoring info
 
-# where all the new things get created and grouped...
+
+#Assisted by Python Crash Course Textbook
+#attempted to add a scoreboard
+class Scoreboard(Sprite):
+    #initialize scorekeeping 
+    def __init__(self, ai_settings, screen, stats):
+        self.screen = screen
+        self.screen_rect = screen.get_rect()
+        self.ai_settings = ai_settings
+        self.stats = stats
+
+        #Font/ Text color
+        self.text_color = (30, 30, 30)
+        self.font = pygame.font.SysFont(none, 48)
+
+        #Preparation for initial score image
+        self.prep_score()
+    #turn text to be displayed into an image
+    def prep_score(self):
+        #turns the score into a rendered image
+        score_str = str(self.stats.score)
+        #Sets score on the background
+        self.score_image = self.font.render(score_str, True, self.text_color, self.ai_settings.bg_color)
+
+        #displays score at top right of the screen
+        self.score_rect = self.score_image.get_rect()
+        self.score_rect.right = self.screen_rect.right - 20
+        self.score_rect.top = 20
+    
+    #displays rendered scoreboard 
+    def show_score(self):
+        #Draws score on screen
+        self.screen.blit(self.score_image, self.score_rect)
+
+    def initialize_dynamic_settings(self):
+        #scoring
+        self.Mob_points = 50
+    
+    def check_Lazer_Mob_collisions(self, ai_settings, screen, stats, sb, Player, Mob, Lazer):
+        #Respond to Mob-Lazer collisions
+        #Removes Lazers and ALiens that have collided
+        collisions = pygame.sprite.groupcollide(Lazer, Mob, True, True)
+        if collisions:
+            stats.score += ai_settings.Mob_points
+            sb.prep_score
+    def update_Lazer(self, ai_settings, screen, stats, sb, Player, Mob, Lazer):
+        #update lazer position remove old lazers
+        self.check_Lazer_Mob_collisions(ai_settings, screen, stats, sb, Player, Mob, Lazer)
+    
+   
+
+
+
+
+
+
+# where classes get created and added to sprites group
 all_sprites = pg.sprite.Group()
+#added scoreboard to sprite group
+Scoreboard = pg.sprite.Group()
 mobs = pg.sprite.Group()
 lazers = pg.sprite.Group()
 player = Player()
@@ -141,8 +222,8 @@ while running:
 
     # update
     all_sprites.update()
+    #If mobs and Lazers collide with other classes they no longer can run
     hits = pg.sprite.groupcollide(mobs, lazers, True, True)
-
     hits = pg.sprite.spritecollide(player, mobs, False)
     if hits:
         running = False
@@ -153,14 +234,17 @@ while running:
             all_sprites.add(mob)
             mobs.add(mob)
 
-    screen.fill(DARKBLUE)
-    #Adds image to background
-    screen.blit(background_image, background_rect)
-    screen.blit(background_image, background_rect2)
-    draw_text(screen, str(score), 18, WIDTH / 2, 10)
-    draw_text(screen, str(player.ammo), 18, WIDTH / 2, 10)
-    all_sprites.draw(screen)
-    pg.display.flip()
+#colors screen
+screen.fill(DARKBLUE)
+#adds custom image to background
+screen.blit(background_image, background_rect)
+screen.blit(background_image, background_rect2)
+draw_text(screen, str(score), 24, WIDTH / 2, 10)
+draw_text(screen, str(player.ammo), 24, WIDTH / 4, 10)
+draw_text(screen, str(player.hitpoints), 16, player.rect.x, player.rect.y)
+
+all_sprites.draw(screen)
+pg.display.flip()
 
 
 pg.quit()
